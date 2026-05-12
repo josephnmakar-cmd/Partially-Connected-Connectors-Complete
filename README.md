@@ -1,103 +1,110 @@
 # Seat Connector Inspection System
 
-A computer vision-based system for real-time inspection of seat connectors in automotive manufacturing. This project uses OpenCV and Python to automatically detect whether seat connectors are properly seated by analyzing the gap width between connector halves and the presence of a notch feature.
+A comprehensive computer vision and deep learning-based system for real-time quality inspection of automotive seat connectors. Developed as part of a Master's Thesis in AI and Automation at University West, this system ensures connectors are properly seated by analyzing physical features and utilizing neural network classification.
 
-## Features
+## Overview
 
-- **Real-time Video Inspection**: Live camera feed with automatic connector tracking
-- **Graphical User Interface**: Tkinter-based interface for calibration and monitoring
-- **Automatic Defect Detection**: Analyzes gap width and notch texture to determine seating status
-- **Defect Logging**: Saves images of failed connectors for analysis
-- **Calibration Mode**: Interactive ROI selection for anchor, gap, and notch regions
-- **Edge Detection Algorithms**: Uses Sobel and Canny edge detection for precise measurements
+The system employs two primary methodologies for inspection:
+1.  **Classical Computer Vision**: Uses template matching, Sobel edge detection for gap measurement, and Canny-based texture scoring for notch detection.
+2.  **Deep Learning (AI)**: Utilizes Convolutional Neural Networks (ResNet18-based) to classify the seating state directly from full frames or cropped Regions of Interest (ROIs).
+
+## Key Features
+
+- **Real-time Inspection**: High-speed video analysis with live visual feedback.
+- **Dual Pipeline**: Traditional CV for precise measurement and AI for robust classification.
+- **Interactive Calibration**: GUI-driven ROI selection and threshold tuning.
+- **Automatic Logging**: Captures and archives images of defective connectors for audit trails.
+- **Performance Evaluation**: Scripts for generating confusion matrices and classification reports.
+- **Data Augmentation**: Training pipeline includes heavy augmentation (flips, rotations, color jitter) for robust AI models.
 
 ## Project Structure
 
-- `User_HMI.py`: Main GUI application for calibration and production inspection
-- `live_inspection.py`: Headless inspection script with automatic logging
-- `edge_detection.py`: Basic edge detection implementation
-- `AquirePhoto.py`: Photo acquisition utilities
-- `Calib_interface.py`: Calibration interface components
-- `settings.json`: VS Code workspace settings
+### Core Application & GUI
+- `User_HMI.py`: The main production interface. Integrated GUI for calibration and monitoring.
+- `live_inspection.py`: Headless version for high-performance deployment.
+- `Calib_interface.py`: Specialized tool for fine-tuning ROIs and edge detection parameters.
+
+### AI & Deep Learning
+- `CNN.py`: Definition and training logic for the neural network classifier.
+- `Train_FullImage.py`: Script to train the model on the full frame dataset.
+- `evaluate model.py`: Generates performance metrics, including confusion matrices and precision/recall reports.
+- `ai_live_view.py`: Real-time AI-based inspection interface.
+- `full_frame_live_view.py`: Live AI inference on full camera frames with logging.
+
+### Utilities & Data Collection
+- `collect_data.py` / `collect_full_data.py`: Tools for capturing and organizing images for dataset creation.
+- `AquirePhoto.py`: Hardware abstraction for camera initialization and frame capture.
+- `edge_detection.py`: Prototyping script for testing new filter kernels and thresholding logic.
 
 ## Requirements
 
-- Python 3.7+
-- OpenCV
-- Pillow (PIL)
-- NumPy
-- Tkinter (usually included with Python)
+### Hardware
+- USB Industrial Camera or standard Webcam.
+- Windows-compatible PC.
+
+### Software (Python 3.7+)
+- `opencv-python`: Core vision processing.
+- `torch` & `torchvision`: Neural network training and inference.
+- `scikit-learn`: Performance metrics and evaluation.
+- `matplotlib` & `seaborn`: Visualization of results.
+- `pillow`, `numpy`: Image handling and numerical operations.
 
 ## Installation
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/seat-connector-inspection.git
-   cd seat-connector-inspection
+   git clone https://github.com/josephnmakar-cmd/Partially-Connected-Connectors-Complete.git
+   cd Partially-Connected-Connectors-Complete
    ```
 
-2. Install dependencies:
+2. **Set up environment**:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
 ## Usage
 
-### GUI Mode (Recommended)
-Run the main inspection interface:
+### 1. Traditional Inspection (CV Mode)
+Run the HMI for interactive setup:
 ```bash
 python User_HMI.py
 ```
+*   **Calibration**: Click "START CALIBRATION" to define the Anchor (tracking), Gap, and Notch ROIs.
+*   **Production**: Click "LOCK & RUN PRODUCTION" to start real-time monitoring.
 
-1. Click "START CALIBRATION" to enter calibration mode
-2. Select the anchor region (connector body)
-3. Select the gap region
-4. Select the notch region
-5. Adjust threshold values if needed
-6. Click "LOCK & RUN PRODUCTION" to start inspection
-
-### Headless Mode
-For automated inspection without GUI:
+### 2. Deep Learning Inspection (AI Mode)
+Run the AI live viewer (requires a trained `full_image_ai.pth` model):
 ```bash
-python live_inspection.py
+python full_frame_live_view.py
 ```
 
-### Basic Edge Detection
-For testing edge detection algorithms:
+### 3. Model Training & Evaluation
+To train a new model on your dataset:
 ```bash
-python edge_detection.py
+python Train_FullImage.py
+```
+To evaluate model performance on the test set:
+```bash
+python "evaluate model.py"
 ```
 
-## Algorithm Overview
+## Data Management
 
-The system uses template matching to track connectors in the video feed, then analyzes two key features:
+- `connector_dataset/`: Image dataset for ROI-based classification.
+- `Full_ConnectorFrame_Dataset/`: Dataset containing full-frame images.
+- `defect_logs/`: Archive of failures detected during traditional inspection.
+- `inspection_logs/`: Archive of images and predictions from the AI pipeline.
 
-1. **Gap Analysis**: Measures the distance between connector edges using Sobel edge detection
-2. **Notch Detection**: Counts edge pixels in the notch region using Canny edge detection
+## Authors
 
-Connectors are classified as:
-- **PASS**: Properly seated (gap within limits, notch present)
-- **FAIL - GAP ERROR**: Gap too wide
-- **FAIL - PARTIAL**: Notch partially present
-- **FAIL - DISCONNECTED**: Notch missing
-
-## Configuration
-
-Adjust parameters in the code:
-- `MAX_ACCEPTABLE_GAP`: Maximum allowed gap in pixels
-- `NOTCH_THRESHOLD`: Minimum edge pixels for notch detection
-- Camera settings in `CAMERA_INDEX`
-
-## Data Folders
-
-- `defect_logs/`: Saved images of failed inspections
-- `thesis_data/full_frames/`: Full frame captures
-- `thesis_data/roi_crops/`: Cropped regions of interest
+**Joseph Makar** - Master Thesis in AI and Automation, University West.
 
 ## License
 
-This project is part of a Master's thesis at University West.
-
-## Author
-
-[Your Name] - University West, Master Thesis in AI and Automation
+This project is proprietary research code developed for academic purposes at University West.
