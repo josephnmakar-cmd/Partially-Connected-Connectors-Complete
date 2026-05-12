@@ -18,6 +18,8 @@ inspection_logs/
 
 # Model Weights and Large Files
 *.pth
+!best_connector_ai.pth
+!full_image_ai.pth
 *.jpg
 *.png
 *.bmp

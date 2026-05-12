@@ -79,12 +79,19 @@ python User_HMI.py
 *   **Production**: Click "LOCK & RUN PRODUCTION" to start real-time monitoring.
 
 ### 2. Deep Learning Inspection (AI Mode)
-Run the AI live viewer (requires a trained `full_image_ai.pth` model):
+Run the AI live viewer. The project includes pre-trained models, so you can start inspection immediately without training:
 ```bash
 python full_frame_live_view.py
 ```
 
-### 3. Model Training & Evaluation
+## Included Models
+
+The repository comes with the following pre-trained models (ResNet18 backbone):
+- `full_image_ai.pth`: Optimized for full-frame connector classification.
+- `best_connector_ai.pth`: Optimized for cropped connector ROIs.
+
+## Model Training & Evaluation
+
 To train a new model on your dataset:
 ```bash
 python Train_FullImage.py
