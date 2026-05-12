@@ -3,7 +3,7 @@ import numpy as np
 
 # --- CONFIGURATION ---
 CAMERA_INDEX = 1        
-MAX_ACCEPTABLE_GAP = 12 # Maximum allowed gap in pixels
+MAX_ACCEPTABLE_GAP = 50 # Maximum allowed gap in pixels
 NOTCH_THRESHOLD = 10     # Minimum texture pixels needed to confirm the notch
 # ---------------------
 

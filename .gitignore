@@ -4,6 +4,20 @@ __pycache__/
 .pytest_cache/
 .vscode/
 *.log
+
+# Datasets
+connector_dataset/
+Full_ConnectorFrame_Dataset/
+Test_FullFrame/
+thesis_data/
+
+# Image Logs and Folders
 defect_logs/
-thesis_data/full_frames/
-thesis_data/roi_crops/
+"defect logs/"
+inspection_logs/
+
+# Model Weights and Large Files
+*.pth
+*.jpg
+*.png
+*.bmp
